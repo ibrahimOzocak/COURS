@@ -15,7 +15,7 @@ void supprimerListe(lst l){
         free(l);
     }
     else{
-        printf("SAIT PAS FAIRE");
+        printf("SAIT PAS FAIRE\n");
     }
     
 }
