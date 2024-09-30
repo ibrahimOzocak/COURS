@@ -1,0 +1,32 @@
+from xml.etree.ElementInclude import include
+from django.urls import path
+
+from monapp import admin
+from .import views
+from django.views.generic import *
+
+urlpatterns=[
+    #path("", views.home, name="home"),
+    #path("home/<param>",views.accueil ,name='accueil'),
+    #path("contact", views.contact, name="contact"),
+    path("about", views.about, name="about"),
+    #path("hello/<param>", views.hello, name="about"),
+    path("produits", views.listProducts, name="produits"),
+    path("status", views.listStatus, name="status"),
+    path("items", views.listItems, name="items"),
+    path("attributes", views.listAttributes, name="attributes"),
+    path("home", views.HomeView.as_view(), name="home"),
+    #path("contact", views.ContactView.as_view()),
+    path("contact", views.ContactView, name="contact"),
+    path("home/<param>", views.HomeViewParam.as_view()),
+    path("product/list",views.ProductListView.as_view(),name="product-list"),
+    path("product/<pk>",views.ProductDetailView.as_view(), name="product-detail"), # pk est l id, on peut mettre ce que l on veut en name
+    path("items/list",views.ItemListView.as_view(),name="items-list"),
+    path("items/<pk>",views.ItemsDetailView.as_view(), name="items-detail"),
+    path("attributes/list",views.AttributeListView.as_view(),name="attributes-list"),
+    path("attributes/<pk>",views.AttributeDetailView.as_view(), name="attributes-detail"),
+    path("login",views.ConnectView.as_view(),name="login"),
+    path("register",views.RegisterView.as_view(),name="register"),
+    path("logout",views.DisconnectView.as_view(),name="logout"),
+    path("email-sent",views.EmailSentView.as_view(),name="email-sent"),
+]

@@ -1,0 +1,21 @@
+{% extends 'monapp/base.html' %}
+{% block title %}
+Mon application DJANGO
+{% endblock %}
+{% block menu %}
+<h1>Liste des ATTRIBUTES</h1>
+{% endblock %}
+{% block contenu %}
+<table class="table">
+<thead>
+<th>Name</th>
+</thead>
+<tbody>
+{% for attribute in attributes %}
+<tr>
+<td><a href="{% url 'attributes-detail' attribute.id %}">{{ attribute.name }}</a></td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+{% endblock %}

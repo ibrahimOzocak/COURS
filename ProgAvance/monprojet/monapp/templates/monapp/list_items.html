@@ -1,0 +1,27 @@
+{% extends 'monapp/base.html' %}
+{% block title %}
+Mon application DJANGO
+{% endblock %}
+{% block menu %}
+<h1>{{ titre }}</h1>
+{% endblock %}
+{% block contenu %}
+<table class="table">
+<thead>
+<th>Product</th>
+<th>Color</th>
+<th>Attribute</th>
+<th>Code</th>
+</thead>
+<tbody>
+{% for item in items %}
+<tr>
+<td><a href="{% url 'items-detail' item.id %}">{{ item.product }}</a></td>
+<td>{{ item.color }} </td>
+<td>{{ item.attributes }} </td>
+<td>{{ item.code }} </td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+{% endblock %}
