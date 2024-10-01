@@ -29,4 +29,13 @@ urlpatterns=[
     path("register",views.RegisterView.as_view(),name="register"),
     path("logout",views.DisconnectView.as_view(),name="logout"),
     path("email-sent",views.EmailSentView.as_view(),name="email-sent"),
+    path("product/add/",views.ProductCreateView.as_view(), name="product-add"),
+    path("product/<pk>/update/",views.ProductUpdateView.as_view(), name="product-update"),
+    path("product/<pk>/delete/",views.ProductDeleteView.as_view(), name="product-delete"),
+    path("item/add/",views.ItemCreateView.as_view(), name="item-add"),
+    path("item/<pk>/update/",views.ItemUpdateView.as_view(), name="item-update"),
+    path("item/<pk>/delete/",views.ItemDeleteView.as_view(), name="item-delete"),
+    path("attribut/add/",views.AttributeCreateView.as_view(), name="attribute-add"),
+    path("attribut/<pk>/update/",views.AttributeUpdateView.as_view(), name="attribute-update"),
+    path("attribut/<pk>/delete/",views.AttributeDeleteView.as_view(), name="attribute-delete"),
 ]

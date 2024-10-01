@@ -12,5 +12,7 @@ Mon application DJANGO
 <li>Attribute: {{ items.attributes }}</li>
 <li>Code : {{ items.code }}</li>
 </ul>
+<p><a href="{% url 'item-update' items.id %}" class="btn btn-primary">modifier</a></p>
+<p><a href="{% url 'item-delete' items.id %}" class="btn btn-danger">supprimer</a></p>
 <td><a href="{% url 'items-list' %}">Retour à la liste d'items</a></td>
 {% endblock %}

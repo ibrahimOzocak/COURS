@@ -9,11 +9,15 @@ Mon application DJANGO
 <table class="table">
 <thead>
 <th>Name</th>
+<th>Modifier</th>
+<th>Supprimer</th>
 </thead>
 <tbody>
 {% for attribute in attributes %}
 <tr>
 <td><a href="{% url 'attributes-detail' attribute.id %}">{{ attribute.name }}</a></td>
+<td><a href="{% url 'attribute-update' attribute.id %}" class="btn btn-primary">modifier</a></td>
+<td><a href="{% url 'attribute-delete' attribute.id %}" class="btn btn-danger">supprimer</a></td>
 </tr>
 {% endfor %}
 </tbody>

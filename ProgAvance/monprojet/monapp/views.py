@@ -8,7 +8,9 @@ from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView
 from django.core.mail import send_mail
 
-from .forms import ContactUsForm
+from .forms import AttributeForm, ContactUsForm, ItemForm, ProductForm
+from django.forms.models import BaseModelForm
+from django.urls import reverse_lazy
 
 
 """ def home(request):
@@ -228,3 +230,73 @@ class EmailSentView(TemplateView):
     def get(self, request, **kwargs):
         logout(request)
         return render(request, self.template_name)
+    
+class ProductCreateView(CreateView):
+    model = Product  # Define the model you're working with
+    form_class = ProductForm  # Define the form class you're using
+    template_name = 'monapp/new_product.html'  # Define the template for rendering
+    
+    def form_valid(self, form: BaseModelForm) -> HttpResponse:
+        product = form.save()
+        return redirect('product-detail', product.id)
+
+class ProductUpdateView(UpdateView):
+    model = Product  # Define the model you're working with
+    form_class = ProductForm  # Define the form class you're using
+    template_name = 'monapp/update_product.html'  # Define the template for rendering
+    
+    def form_valid(self, form: BaseModelForm) -> HttpResponse:
+        product = form.save()
+        return redirect('product-detail', product.id)
+
+class ProductDeleteView(DeleteView):
+    model = Product
+    template_name = "monapp/delete_product.html"
+    success_url = reverse_lazy('product-list')  # URL to redirect to after successful deletion
+
+class ItemCreateView(CreateView):
+    model = ProductItem  # Define the model you're working with
+    form_class = ItemForm  # Define the form class you're using
+    template_name = 'monapp/new_item.html'  # Define the template for rendering
+    
+    def form_valid(self, form: BaseModelForm) -> HttpResponse:
+        item = form.save()
+        return redirect('items-detail', item.id)
+
+class ItemUpdateView(UpdateView):
+    model = ProductItem  # Define the model you're working with
+    form_class = ItemForm  # Define the form class you're using
+    template_name = 'monapp/update_item.html'  # Define the template for rendering
+    
+    def form_valid(self, form: BaseModelForm) -> HttpResponse:
+        item = form.save()
+        return redirect('items-detail', item.id)
+
+class ItemDeleteView(DeleteView):
+    model = ProductItem
+    template_name = "monapp/delete_item.html"
+    success_url = reverse_lazy('items-list')  # URL to redirect to after successful deletion
+
+class AttributeCreateView(CreateView):
+    model = ProductAttributeValue  # Define the model you're working with
+    form_class = AttributeForm  # Define the form class you're using
+    template_name = 'monapp/new_attribute.html'  # Define the template for rendering
+    
+    def form_valid(self, form: BaseModelForm) -> HttpResponse:
+        attribute = form.save()
+        return redirect('attributes-detail', attribute.id)
+
+class AttributeUpdateView(UpdateView):
+    model = ProductAttribute  # Define the model you're working with
+    form_class = AttributeForm  # Define the form class you're using
+    template_name = 'monapp/update_attribute.html'  # Define the template for rendering
+    
+    def form_valid(self, form: BaseModelForm) -> HttpResponse:
+        attribute = form.save()
+        return redirect('attributes-detail', attribute.id)
+
+class AttributeDeleteView(DeleteView):
+    model = ProductAttribute
+    template_name = "monapp/delete_attribute.html"
+    success_url = reverse_lazy('attributes-list')  # URL to redirect to after successful deletion
+    
