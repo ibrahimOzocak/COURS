@@ -157,19 +157,6 @@ class AttributeListView(ListView):
         context['titre'] = "Liste des attributs"
         return context
     
-class AttributeDetailView(DetailView):
-    model = ProductAttributeValue
-    template_name = "monapp/detail_attribute.html"
-    context_object_name = "attributesVal"
-
-    def get_queryset(self ) :
-        return ProductAttributeValue.objects.order_by("value")
-
-    def get_context_data(self, **kwargs):
-        context = super(AttributeDetailView, self).get_context_data(**kwargs)
-        context['titremenu'] = "Détail attribute"
-        return context
-    
 class ConnectView(LoginView):
     template_name = 'monapp/login.html'
 
@@ -278,13 +265,13 @@ class ItemDeleteView(DeleteView):
     success_url = reverse_lazy('items-list')  # URL to redirect to after successful deletion
 
 class AttributeCreateView(CreateView):
-    model = ProductAttributeValue  # Define the model you're working with
+    model = ProductAttribute  # Define the model you're working with
     form_class = AttributeForm  # Define the form class you're using
     template_name = 'monapp/new_attribute.html'  # Define the template for rendering
     
     def form_valid(self, form: BaseModelForm) -> HttpResponse:
         attribute = form.save()
-        return redirect('attributes-detail', attribute.id)
+        return redirect('attributes-list')
 
 class AttributeUpdateView(UpdateView):
     model = ProductAttribute  # Define the model you're working with
@@ -293,10 +280,9 @@ class AttributeUpdateView(UpdateView):
     
     def form_valid(self, form: BaseModelForm) -> HttpResponse:
         attribute = form.save()
-        return redirect('attributes-detail', attribute.id)
+        return redirect('attributes-list')
 
 class AttributeDeleteView(DeleteView):
     model = ProductAttribute
     template_name = "monapp/delete_attribute.html"
     success_url = reverse_lazy('attributes-list')  # URL to redirect to after successful deletion
-    

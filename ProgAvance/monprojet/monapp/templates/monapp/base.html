@@ -21,21 +21,21 @@
                     <li class="nav-item">
                     <a class="nav-link" href="{% url 'logout' %}">Déconnexion</a>
                     </li>
+                    <li class="nav-item">
+                    <a class="nav-link" href="{% url 'product-add' %}">Créer un nouveau produit</a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link" href="{% url 'item-add' %}">Créer un nouveau item</a>
+                    </li>
+                    <li class="nav-item"></li>
+                    <a class="nav-link" href="{% url 'attribute-add' %}">Créer un nouveau attribut</a>
+                    </li>
                     {%else%}
                     <li class="nav-item">
                     <a class="nav-link" href="{% url 'login' %}">Connexion</a>
                     </li>
                     <li class="nav-item">
                     <a class="nav-link" href="{% url 'register' %}">Inscription</a>
-                    </li>
-                    <li class="nav-item">
-                    <a class="nav-link" href="{% url 'product-add' %}">Créer un nouveau produit</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'item-add' %}">Créer un nouveau item</a>
-                    </li>
-                    <li class="nav-item"></li>
-                        <a class="nav-link" href="{% url 'attribute-add' %}">Créer un nouveau attribut</a>
                     </li>
                     {%endif%}
                 </ul>

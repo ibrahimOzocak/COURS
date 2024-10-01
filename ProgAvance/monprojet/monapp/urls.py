@@ -24,7 +24,6 @@ urlpatterns=[
     path("items/list",views.ItemListView.as_view(),name="items-list"),
     path("items/<pk>",views.ItemsDetailView.as_view(), name="items-detail"),
     path("attributes/list",views.AttributeListView.as_view(),name="attributes-list"),
-    path("attributes/<pk>",views.AttributeDetailView.as_view(), name="attributes-detail"),
     path("login",views.ConnectView.as_view(),name="login"),
     path("register",views.RegisterView.as_view(),name="register"),
     path("logout",views.DisconnectView.as_view(),name="logout"),
