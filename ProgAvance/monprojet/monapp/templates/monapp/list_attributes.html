@@ -8,16 +8,33 @@ Mon application DJANGO
 {% block contenu %}
 <table class="table">
 <thead>
-<th>Name</th>
-<th>Modifier</th>
-<th>Supprimer</th>
+<th>Nom</th>
+<th>Valeurs</th>
+<th>Position</th>
+<th>Actions</th>
 </thead>
 <tbody>
-{% for attribute in attributes %}
+{% for attribute in productattributes %}
 <tr>
-<td>{{ attribute.name }}</td>
-<td><a href="{% url 'attribute-update' attribute.id %}" class="btn btn-primary">modifier</a></td>
-<td><a href="{% url 'attribute-delete' attribute.id %}" class="btn btn-danger">supprimer</a></td>
+<td><a href="{% url 'attribute-detail' attribute.id %}" class="btn btn-primary mt-2">{{ attribute.name}}</a></td>
+<td>
+    {% for value in attribute.productattributevalue_set.all %}
+    <p>{{ value.value }}</p>
+    {% empty %}
+    <p>Aucune valeur</p>
+    {% endfor %}
+</td>
+<td>
+    {% for value in attribute.productattributevalue_set.all %}
+    <p>{{ value.position }}</p>
+    {% empty %}
+    <p>Aucune valeur</p>
+    {% endfor %}
+</td>
+<td>
+<a href="{% url 'attribute-update' attribute.id %}" class="btn btn-warning mt-2">Modifier</a>
+<a href="{% url 'attribute-delete' attribute.id %}" class="btn btn-danger mt-2">Supprimer</a>
+</td>
 </tr>
 {% endfor %}
 </tbody>

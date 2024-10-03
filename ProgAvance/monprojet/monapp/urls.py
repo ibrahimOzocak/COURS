@@ -21,9 +21,12 @@ urlpatterns=[
     path("home/<param>", views.HomeViewParam.as_view()),
     path("product/list",views.ProductListView.as_view(),name="product-list"),
     path("product/<pk>",views.ProductDetailView.as_view(), name="product-detail"), # pk est l id, on peut mettre ce que l on veut en name
-    path("items/list",views.ItemListView.as_view(),name="items-list"),
-    path("items/<pk>",views.ItemsDetailView.as_view(), name="items-detail"),
-    path("attributes/list",views.AttributeListView.as_view(),name="attributes-list"),
+    #path("items/list",views.ItemListView.as_view(),name="items-list"),
+    path("items/list",views.ProductItemListView.as_view(),name="items-list"),
+    #path("items/<pk>",views.ItemsDetailView.as_view(), name="items-detail"),
+    path("items/<pk>",views.ProductItemDetailView.as_view(), name="items-detail"),
+    #path("attributes/list",views.AttributeListView.as_view(),name="attributes-list"),
+    path("attributes/list",views.ProductAttributeListView.as_view(), name="attributes-list"),
     path("login",views.ConnectView.as_view(),name="login"),
     path("register",views.RegisterView.as_view(),name="register"),
     path("logout",views.DisconnectView.as_view(),name="logout"),
@@ -37,4 +40,8 @@ urlpatterns=[
     path("attribut/add/",views.AttributeCreateView.as_view(), name="attribute-add"),
     path("attribut/<pk>/update/",views.AttributeUpdateView.as_view(), name="attribute-update"),
     path("attribut/<pk>/delete/",views.AttributeDeleteView.as_view(), name="attribute-delete"),
+    path("attribut/<pk>",views.ProductAttributeDetailView.as_view(), name="attribute-detail"),
+    
 ]
+
+################################################### PAGE 9 TD4 ###################################################

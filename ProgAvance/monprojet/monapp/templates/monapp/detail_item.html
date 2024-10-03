@@ -6,13 +6,16 @@ Mon application DJANGO
 <h1>{{titremenu}}</h1>
 {% endblock %}
 {% block contenu %}
-<h2>{{ items.product }}</h2>
+<h2>{{ productitem.code }}</h2>
 <ul>
-<li>Color : {{ items.color }}</li>
-<li>Attribute: {{ items.attributes }}</li>
-<li>Code : {{ items.code }}</li>
+<li>Produit : {{ productitem.product }}</li>
+{% for attribute in attributes %}
+<li>{{ attribute.product_attribute.name }} : {{ attribute.value }}</li>
+{% empty %}
+<li>Aucun attribut associé à cette déclinaison.</li>
+{% endfor %}
 </ul>
-<p><a href="{% url 'item-update' items.id %}" class="btn btn-primary">modifier</a></p>
-<p><a href="{% url 'item-delete' items.id %}" class="btn btn-danger">supprimer</a></p>
-<td><a href="{% url 'items-list' %}">Retour à la liste d'items</a></td>
+<a href="{% url 'items-list' %}" class="btn btn-outline-secondary mt-2">Retour</a>
+<a href="{% url 'item-update' productitem.id %}" class="btn btn-warning mt-2">Modifier</a>
+<a href="{% url 'item-delete' productitem.id %}" class="btn btn-danger mt-2">Supprimer</a>
 {% endblock %}

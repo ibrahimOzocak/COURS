@@ -76,19 +76,19 @@ class HomeView(TemplateView):
     def post(self, request, **kwargs):
         return render(request, self.template_name)    
     
-"""     
-class ContactView(TemplateView):
-    template_name = "monapp/contact.html"
+    
+# class ContactView(TemplateView):
+#     template_name = "monapp/contact.html"
         
-    def get_context_data(self, **kwargs):
-        context = super(ContactView, self).get_context_data(**kwargs)
-        context['titreh1'] = "Nous contacter"
-        context['paragraphe'] = "Formulaire de contact disponible prochainement"
-        return context
+#     def get_context_data(self, **kwargs):
+#         context = super(ContactView, self).get_context_data(**kwargs)
+#         context['titreh1'] = "Nous contacter"
+#         context['paragraphe'] = "Formulaire de contact disponible prochainement"
+#         return context
 
-    def post(self, request, **kwargs):
-        return render(request, self.template_name)
- """
+#     def post(self, request, **kwargs):
+#         return render(request, self.template_name)
+
 
 class HomeViewParam(TemplateView):
     template_name = "home.html"
@@ -124,18 +124,18 @@ class ProductDetailView(DetailView):
         context['titremenu'] = "Détail produit"
         return context
 
-class ItemListView(ListView):
-    model = ProductItem
-    template_name = "monapp/list_items.html"
-    context_object_name = "items"
+# class ItemListView(ListView):
+#     model = ProductItem
+#     template_name = "monapp/list_items.html"
+#     context_object_name = "items"
 
-    def get_queryset(self ) :
-        return ProductItem.objects.order_by("code")
+#     def get_queryset(self ) :
+#         return ProductItem.objects.order_by("code")
     
-    def get_context_data(self, **kwargs):
-        context = super(ItemListView, self).get_context_data(**kwargs)
-        context['titre'] = "Liste des items"
-        return context
+#     def get_context_data(self, **kwargs):
+#         context = super(ItemListView, self).get_context_data(**kwargs)
+#         context['titre'] = "Liste des items"
+#         return context
 
 class ItemsDetailView(DetailView):
     model = ProductItem
@@ -147,15 +147,15 @@ class ItemsDetailView(DetailView):
         context['titremenu'] = "Détail item"
         return context
     
-class AttributeListView(ListView):
-    model = ProductAttribute
-    template_name = "monapp/list_attributes.html"
-    context_object_name = "attributes"
+# class AttributeListView(ListView):
+#     model = ProductAttribute
+#     template_name = "monapp/list_attributes.html"
+#     context_object_name = "attributes"
     
-    def get_context_data(self, **kwargs):
-        context = super(AttributeListView, self).get_context_data(**kwargs)
-        context['titre'] = "Liste des attributs"
-        return context
+#     def get_context_data(self, **kwargs):
+#         context = super(AttributeListView, self).get_context_data(**kwargs)
+#         context['titre'] = "Liste des attributs"
+#         return context
     
 class ConnectView(LoginView):
     template_name = 'monapp/login.html'
@@ -286,3 +286,52 @@ class AttributeDeleteView(DeleteView):
     model = ProductAttribute
     template_name = "monapp/delete_attribute.html"
     success_url = reverse_lazy('attributes-list')  # URL to redirect to after successful deletion
+
+class ProductAttributeListView(ListView):
+    model = ProductAttribute
+    template_name = "monapp/list_attributes.html"
+    context_object_name = "productattributes"
+
+    def get_queryset(self ):
+        return ProductAttribute.objects.all().prefetch_related('productattributevalue_set')
+    def get_context_data(self, **kwargs):
+
+        context = super(ProductAttributeListView, self).get_context_data(**kwargs)
+        context['titremenu'] = "Liste des attributs"
+        return context
+
+class ProductAttributeDetailView(DetailView):
+    model = ProductAttribute
+    template_name = "monapp/detail_attribute.html"
+    context_object_name = "productattribute"
+
+    def get_context_data(self, **kwargs):
+        context = super(ProductAttributeDetailView, self).get_context_data(**kwargs)
+        context['titremenu'] = "Détail attribut"
+        context['values']=ProductAttributeValue.objects.filter(product_attribute=self.object).order_by('position')
+        return context
+    
+class ProductItemListView(ListView):
+    model = ProductItem
+    template_name = "monapp/list_items.html"
+    context_object_name = "productitems"
+
+    def get_queryset(self ):
+       return ProductItem.objects.select_related('product').prefetch_related('attributes')
+
+    def get_context_data(self, **kwargs):
+        context = super(ProductItemListView, self).get_context_data(**kwargs)
+        context['titremenu'] = "Liste des déclinaisons"
+        return context
+    
+class ProductItemDetailView(DetailView):
+    model = ProductItem
+    template_name = "monapp/detail_item.html"
+    context_object_name = "productitem"
+
+    def get_context_data(self, **kwargs):
+        context = super(ProductItemDetailView, self).get_context_data(**kwargs)
+        context['titremenu'] = "Détail déclinaison"
+        # Récupérer les attributs associés à cette déclinaison
+        context['attributes'] = self.object.attributes.all()
+        return context

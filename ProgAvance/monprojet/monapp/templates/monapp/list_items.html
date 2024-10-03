@@ -8,22 +8,27 @@ Mon application DJANGO
 {% block contenu %}
 <table class="table">
 <thead>
-<th>Product</th>
-<th>Color</th>
-<th>Attribute</th>
 <th>Code</th>
-<th>Modifier</th>
-<th>Supprimer</th>
+<th>Produit</th>
+<th>Attributs associés</th>
+<th>Actions</th>
 </thead>
 <tbody>
-{% for item in items %}
+{% for item in productitems %}
 <tr>
-<td><a href="{% url 'items-detail' item.id %}">{{ item.product }}</a></td>
-<td>{{ item.color }} </td>
-<td>{{ item.attributes }} </td>
-<td>{{ item.code }} </td>
-<td><a href="{% url 'item-update' item.id %}" class="btn btn-primary">modifier</a></td>
-<td><a href="{% url 'item-delete' item.id %}" class="btn btn-danger">supprimer</a></td>
+<td>{{ item.code }}</a></td>
+<td><a href="{% url 'items-detail' item.id %}" class="btn btn-primary mt-2">{{ item.product.name }}</a></td>
+<td>{% for attribute in item.attributes.all %}
+<p>{{ attribute.product_attribute.name }} : {{attribute.value }}</p>
+{% empty %}
+<p>Aucune valeur</p>
+{% endfor %}
+</td>
+<td>
+
+<a href="{% url 'item-update' item.id %}" class="btn btn-warning mt-2">Modifier</a>
+<a href="{% url 'item-delete' item.id %}" class="btn btn-danger mt-2">Supprimer</a>
+</td>
 </tr>
 {% endfor %}
 </tbody>
