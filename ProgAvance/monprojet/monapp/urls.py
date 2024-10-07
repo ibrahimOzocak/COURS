@@ -41,7 +41,7 @@ urlpatterns=[
     path("attribut/<pk>/update/",views.AttributeUpdateView.as_view(), name="attribute-update"),
     path("attribut/<pk>/delete/",views.AttributeDeleteView.as_view(), name="attribute-delete"),
     path("attribut/<pk>",views.ProductAttributeDetailView.as_view(), name="attribute-detail"),
-    
-]
+    path("attributValue/list",views.ProductAttributeValueListView.as_view(), name="attributeValue-list"),
+    path("attributValue/<pk>",views.ProductAttributeValueDetailView.as_view(), name="attributeValue-detail"),
 
-################################################### PAGE 9 TD4 ###################################################
+]

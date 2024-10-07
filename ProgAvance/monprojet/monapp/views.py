@@ -12,6 +12,8 @@ from .forms import AttributeForm, ContactUsForm, ItemForm, ProductForm
 from django.forms.models import BaseModelForm
 from django.urls import reverse_lazy
 
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
 """ def home(request):
     if request.GET and request.GET["test"]:
@@ -106,8 +108,16 @@ class ProductListView(ListView):
     template_name = "monapp/list_products.html"
     context_object_name = "products"
 
-    def get_queryset(self ) :
-        return Product.objects.order_by("price_ttc")
+    def get_queryset(self ):
+        # Surcouche pour filtrer les résultats en fonction de la recherche
+        # Récupérer le terme de recherche depuis la requête GET
+        query = self.request.GET.get('search')
+        if query:
+        # Filtre les produits par nom (insensible à la casse)
+            return Product.objects.filter(name__icontains=query)
+        
+        # Si aucun terme de recherche, retourner tous les produits
+        return Product.objects.all()
     
     def get_context_data(self, **kwargs):
         context = super(ProductListView, self).get_context_data(**kwargs)
@@ -218,6 +228,8 @@ class EmailSentView(TemplateView):
         logout(request)
         return render(request, self.template_name)
     
+# Ajout du décorateur login_required à une CBV
+@method_decorator(login_required, name='dispatch')
 class ProductCreateView(CreateView):
     model = Product  # Define the model you're working with
     form_class = ProductForm  # Define the form class you're using
@@ -227,6 +239,8 @@ class ProductCreateView(CreateView):
         product = form.save()
         return redirect('product-detail', product.id)
 
+# Ajout du décorateur login_required à une CBV
+@method_decorator(login_required, name='dispatch')
 class ProductUpdateView(UpdateView):
     model = Product  # Define the model you're working with
     form_class = ProductForm  # Define the form class you're using
@@ -236,11 +250,15 @@ class ProductUpdateView(UpdateView):
         product = form.save()
         return redirect('product-detail', product.id)
 
+# Ajout du décorateur login_required à une CBV
+@method_decorator(login_required, name='dispatch')
 class ProductDeleteView(DeleteView):
     model = Product
     template_name = "monapp/delete_product.html"
     success_url = reverse_lazy('product-list')  # URL to redirect to after successful deletion
 
+# Ajout du décorateur login_required à une CBV
+@method_decorator(login_required, name='dispatch')
 class ItemCreateView(CreateView):
     model = ProductItem  # Define the model you're working with
     form_class = ItemForm  # Define the form class you're using
@@ -250,6 +268,8 @@ class ItemCreateView(CreateView):
         item = form.save()
         return redirect('items-detail', item.id)
 
+# Ajout du décorateur login_required à une CBV
+@method_decorator(login_required, name='dispatch')
 class ItemUpdateView(UpdateView):
     model = ProductItem  # Define the model you're working with
     form_class = ItemForm  # Define the form class you're using
@@ -259,11 +279,15 @@ class ItemUpdateView(UpdateView):
         item = form.save()
         return redirect('items-detail', item.id)
 
+# Ajout du décorateur login_required à une CBV
+@method_decorator(login_required, name='dispatch')
 class ItemDeleteView(DeleteView):
     model = ProductItem
     template_name = "monapp/delete_item.html"
     success_url = reverse_lazy('items-list')  # URL to redirect to after successful deletion
 
+# Ajout du décorateur login_required à une CBV
+@method_decorator(login_required, name='dispatch')
 class AttributeCreateView(CreateView):
     model = ProductAttribute  # Define the model you're working with
     form_class = AttributeForm  # Define the form class you're using
@@ -273,6 +297,8 @@ class AttributeCreateView(CreateView):
         attribute = form.save()
         return redirect('attributes-list')
 
+# Ajout du décorateur login_required à une CBV
+@method_decorator(login_required, name='dispatch')
 class AttributeUpdateView(UpdateView):
     model = ProductAttribute  # Define the model you're working with
     form_class = AttributeForm  # Define the form class you're using
@@ -282,6 +308,8 @@ class AttributeUpdateView(UpdateView):
         attribute = form.save()
         return redirect('attributes-list')
 
+# Ajout du décorateur login_required à une CBV
+@method_decorator(login_required, name='dispatch')
 class AttributeDeleteView(DeleteView):
     model = ProductAttribute
     template_name = "monapp/delete_attribute.html"
@@ -292,10 +320,21 @@ class ProductAttributeListView(ListView):
     template_name = "monapp/list_attributes.html"
     context_object_name = "productattributes"
 
-    def get_queryset(self ):
-        return ProductAttribute.objects.all().prefetch_related('productattributevalue_set')
-    def get_context_data(self, **kwargs):
+    # def get_queryset(self ):
+    #     return ProductAttribute.objects.all().prefetch_related('productattributevalue_set')
 
+    def get_queryset(self):
+        # Surcouche pour filtrer les résultats en fonction de la recherche
+        # Récupérer le terme de recherche depuis la requête GET
+        query = self.request.GET.get('search')
+        if query:
+        # Filtre les produits par nom (insensible à la casse)
+            return ProductAttribute.objects.filter(name__icontains=query)
+        
+        # Si aucun terme de recherche, retourner tous les produits
+        return ProductAttribute.objects.all()
+    
+    def get_context_data(self, **kwargs):
         context = super(ProductAttributeListView, self).get_context_data(**kwargs)
         context['titremenu'] = "Liste des attributs"
         return context
@@ -316,8 +355,19 @@ class ProductItemListView(ListView):
     template_name = "monapp/list_items.html"
     context_object_name = "productitems"
 
+    # def get_queryset(self ):
+    #    return ProductItem.objects.select_related('product').prefetch_related('attributes')
+
     def get_queryset(self ):
-       return ProductItem.objects.select_related('product').prefetch_related('attributes')
+        # Surcouche pour filtrer les résultats en fonction de la recherche
+        # Récupérer le terme de recherche depuis la requête GET
+        query = self.request.GET.get('search')
+        if query:
+        # Filtre les produits par nom (insensible à la casse)
+            return ProductItem.objects.filter(code__icontains=query)
+        
+        # Si aucun terme de recherche, retourner tous les produits
+        return ProductItem.objects.all()
 
     def get_context_data(self, **kwargs):
         context = super(ProductItemListView, self).get_context_data(**kwargs)
@@ -334,4 +384,38 @@ class ProductItemDetailView(DetailView):
         context['titremenu'] = "Détail déclinaison"
         # Récupérer les attributs associés à cette déclinaison
         context['attributes'] = self.object.attributes.all()
+        return context
+    
+class ProductAttributeValueListView(ListView):
+    model = ProductAttributeValue
+    template_name = "monapp/list_attributesValue.html"
+    context_object_name = "productAttributeValue"
+
+    # def get_queryset(self ):
+    #     return ProductAttribute.objects.all().prefetch_related('productattributevalue_set')
+
+    def get_queryset(self):
+        # Surcouche pour filtrer les résultats en fonction de la recherche
+        # Récupérer le terme de recherche depuis la requête GET
+        query = self.request.GET.get('search')
+        if query:
+        # Filtre les produits par nom (insensible à la casse)
+            return ProductAttributeValue.objects.filter(product_attribute__name__icontains=query)
+        
+        # Si aucun terme de recherche, retourner tous les produits
+        return ProductAttributeValue.objects.all()
+    
+    def get_context_data(self, **kwargs):
+        context = super(ProductAttributeValueListView, self).get_context_data(**kwargs)
+        context['titremenu'] = "Liste des valeurs d'attributs"
+        return context
+
+class ProductAttributeValueDetailView(DetailView):
+    model = ProductAttributeValue
+    template_name = "monapp/detail_attributeValue.html"
+    context_object_name = "productAttributeValue"
+
+    def get_context_data(self, **kwargs):
+        context = super(ProductAttributeValueDetailView, self).get_context_data(**kwargs)
+        context['titremenu'] = "Détail déclinaison"
         return context
