@@ -1,0 +1,1 @@
+/home/iut45/Etudiants/o22204518/WinHome/COURS/Rust/tp0/1_meteo/target/debug/keltan: /home/iut45/Etudiants/o22204518/WinHome/COURS/Rust/tp0/1_meteo/src/main.rs /home/iut45/Etudiants/o22204518/WinHome/COURS/Rust/tp0/1_meteo/src/tests.rs
