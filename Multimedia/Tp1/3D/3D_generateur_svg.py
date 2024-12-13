@@ -128,20 +128,22 @@ cube = [
     0, 7, 4   # triangle 2 face 6
 ]
 
-dessin = svgwrite.Drawing('Cube.svg', size=(800,600))
+dessin = svgwrite.Drawing('CubeMultiple.svg', size=(800,600))
 
 colors = ("blue", "red", "green", "purple", "yellow", "white", "coral", "darkblue")
-for i in range(len(cube) // 3):
-    p1 = points[cube[3 * i]]
-    p2 = points[cube[3 * i + 1]]
-    p3 = points[cube[3 * i + 2]]
-    
-    rotated_points = [prodMatVect3D(Matrotation3DY(math.pi / 6), sommet) for sommet in [p1, p2, p3]]
-    rotated_points = [prodMatVect3D(Matrotation3DX(math.pi / 12), sommet) for sommet in rotated_points]
-    rotated_points = [prodMatVect3D(Matrotation3DZ(math.pi / 12), sommet) for sommet in rotated_points]
-    translated_points = [projection(prodMatVect3D(Matdilatation3D(0.5), changer_point(sommet, (200, 400, 0)))) for sommet in rotated_points]
-    
-    dessin.add(dessin.polygon(translated_points, fill=colors[(i%(len(colors)*2))//2], opacity=0.5, stroke='black'))
+for ind in range(1,8):
+    for i in range(len(cube) // 3):
+        p1 = points[cube[3 * i]]
+        p2 = points[cube[3 * i + 1]]
+        p3 = points[cube[3 * i + 2]]
+        
+        rotated_points = [prodMatVect3D(Matrotation3DY(math.pi / 6), sommet) for sommet in [p1, p2, p3]]
+        rotated_points = [prodMatVect3D(Matrotation3DX(math.pi / 12), sommet) for sommet in rotated_points]
+        rotated_points = [prodMatVect3D(Matrotation3DZ(math.pi / 12+ind/10), sommet) for sommet in rotated_points]
+        translated_points = [projection(prodMatVect3D(Matdilatation3D(0.9-ind/10), changer_point(sommet, (200, 400, 0)))) for sommet in rotated_points]
+        translated_points = [translater(sommet, (100*ind, 40*ind)) for sommet in translated_points]
+
+        dessin.add(dessin.polygon(translated_points, fill=colors[(i%(len(colors)*2))//2], opacity=0.5, stroke='black'))
 
 #compose(pointsModif,cube)
 
