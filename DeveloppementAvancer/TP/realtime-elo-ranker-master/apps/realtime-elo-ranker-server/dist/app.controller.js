@@ -38,8 +38,8 @@ let AppController = class AppController {
         const updatedPlayers = this.appService.getPlayers();
         this.eventGateway.emitRankingUpdate({ updatedPlayers });
     }
-    onRankingUpdate() {
-        console.log("Client connecté aux mises à jour.");
+    onRankingUpdate(req) {
+        console.log("Client connecté depuis l'URL :", req.url);
         return this.eventGateway.onRankingUpdate();
     }
 };
@@ -67,9 +67,11 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], AppController.prototype, "playMatch", null);
 __decorate([
-    (0, common_1.Sse)('/ranking/events'),
+    (0, common_1.Get)('ranking/events'),
+    (0, common_1.Sse)(),
+    __param(0, (0, common_1.Request)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", rxjs_1.Observable)
 ], AppController.prototype, "onRankingUpdate", null);
 exports.AppController = AppController = __decorate([

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Injectable, Sse } from '@nestjs/common';
+import { Controller, Get, Post, Body, Injectable, Sse, Request } from '@nestjs/common';
 import { AppService } from './app.service';
 import { Player } from './player';
 import { EventGateway } from './event-emitter'; // Assurez-vous que EventGateway est bien importé
@@ -37,10 +37,12 @@ export class AppController {
     this.eventGateway.emitRankingUpdate({ updatedPlayers });
   }
 
-  @Sse('/ranking/events')
-  onRankingUpdate(): Observable<any> {
-    console.log("Client connecté aux mises à jour.");
-  
+  @Get('ranking/events')
+  @Sse()
+  onRankingUpdate(@Request() req: Request): Observable<any> {
+    // Affiche l'URL complète du client qui se connecte
+    console.log("Client connecté depuis l'URL :", req.url);
+
     return this.eventGateway.onRankingUpdate();
   }
 

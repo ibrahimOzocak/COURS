@@ -79,7 +79,7 @@ export default function Home() {
     });
   }, []);
 
-  console.log("📈 Classement actuel :", ladderData);
+  console.log("📈 Classement actuel :", API_BASE_URL, updateLadderData);
   useEffect(() => {
     console.log("🔍 Recherche du classement...");
     try {

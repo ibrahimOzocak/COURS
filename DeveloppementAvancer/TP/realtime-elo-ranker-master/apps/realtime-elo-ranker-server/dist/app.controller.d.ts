@@ -9,5 +9,5 @@ export declare class AppController {
     addPlayer(id: string): void;
     getPlayers(): Player[];
     playMatch(winnerId: string, loserId: string, draw: boolean): void;
-    onRankingUpdate(): Observable<any>;
+    onRankingUpdate(req: Request): Observable<any>;
 }

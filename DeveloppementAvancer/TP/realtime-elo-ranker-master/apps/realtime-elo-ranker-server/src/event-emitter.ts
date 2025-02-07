@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { Observable } from 'rxjs';
-import { fromEvent } from 'rxjs'; // Importation de `fromEvent`
+import { Observable, fromEvent } from 'rxjs';
 
 @Injectable()
 export class EventGateway {
