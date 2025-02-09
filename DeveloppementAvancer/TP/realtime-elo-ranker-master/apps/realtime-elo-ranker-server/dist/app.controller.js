@@ -22,20 +22,22 @@ let AppController = class AppController {
         this.appService = appService;
         this.eventGateway = eventGateway;
     }
-    addPlayer(id) {
-        const newPlayer = this.appService.addPlayer(id);
+    async addPlayer({ id }) {
+        const newPlayer = await this.appService.addPlayer(id);
         this.eventGateway.emitRankingUpdate({
-            player: { id: newPlayer.id, rank: newPlayer.rank }
+            updatedPlayers: await this.appService.getPlayers()
         });
+        return newPlayer;
     }
-    getPlayers() {
+    async getPlayers() {
         return this.appService.getPlayers();
     }
-    playMatch(winnerId, loserId, draw) {
-        console.log(winnerId, loserId, draw);
-        this.appService.playMatch(winnerId, loserId, draw);
-        const updatedPlayers = this.appService.getPlayers();
-        this.eventGateway.emitRankingUpdate({ updatedPlayers });
+    async playMatch(winnerId, loserId, draw) {
+        await this.appService.playMatch(winnerId, loserId, draw);
+        console.log("🔥 Match joué :", winnerId, loserId, draw);
+        this.eventGateway.emitRankingUpdate({
+            updatedPlayers: await this.appService.getPlayers()
+        });
     }
     onRankingUpdate(req) {
         console.log("Client connecté depuis l'URL :", req.url);
@@ -45,16 +47,16 @@ let AppController = class AppController {
 exports.AppController = AppController;
 __decorate([
     (0, common_1.Post)('player'),
-    __param(0, (0, common_1.Body)('id')),
+    __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
 ], AppController.prototype, "addPlayer", null);
 __decorate([
     (0, common_1.Get)('ranking'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Array)
+    __metadata("design:returntype", Promise)
 ], AppController.prototype, "getPlayers", null);
 __decorate([
     (0, common_1.Post)('match'),
@@ -63,7 +65,7 @@ __decorate([
     __param(2, (0, common_1.Body)('draw')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, String, Boolean]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], AppController.prototype, "playMatch", null);
 __decorate([
     (0, common_1.Get)('ranking/events'),

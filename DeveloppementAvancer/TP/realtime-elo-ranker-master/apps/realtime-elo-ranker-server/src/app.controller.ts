@@ -11,7 +11,7 @@ export class AppController {
     private readonly eventGateway: EventGateway
   ) { }
 
-  @Post('player')
+  /* @Post('player')
   addPlayer(@Body('id') id: string): void {
     //this.appService.addPlayer(id);
     const newPlayer = this.appService.addPlayer(id);
@@ -19,14 +19,29 @@ export class AppController {
     this.eventGateway.emitRankingUpdate({
       player: { id: newPlayer.id, rank: newPlayer.rank }
     });
+  } */
+
+  @Post('player')
+  async addPlayer(@Body() { id }: { id: string }): Promise<Player> {
+    const newPlayer = await this.appService.addPlayer(id);
+    this.eventGateway.emitRankingUpdate({
+      updatedPlayers: await this.appService.getPlayers()
+    });
+
+    return newPlayer;
   }
 
-  @Get('ranking')
+  /* @Get('ranking')
   getPlayers(): Player[] {
+    return this.appService.getPlayers();
+  } */
+
+  @Get('ranking')
+  async getPlayers(): Promise<Player[]> {
     return this.appService.getPlayers();
   }
 
-  @Post('match')
+  /* @Post('match')
   playMatch(@Body('winner') winnerId: string, @Body('loser') loserId: string, @Body('draw') draw: boolean): void {
     console.log(winnerId, loserId, draw);
     this.appService.playMatch(winnerId, loserId, draw);
@@ -35,6 +50,15 @@ export class AppController {
     const updatedPlayers = this.appService.getPlayers();
     // Émettre une mise à jour du classement avec les joueurs mis à jour
     this.eventGateway.emitRankingUpdate({ updatedPlayers });
+  } */
+
+  @Post('match')
+  async playMatch(@Body('winner') winnerId: string, @Body('loser') loserId: string, @Body('draw') draw: boolean): Promise<void> {
+    await this.appService.playMatch(winnerId, loserId, draw);
+    console.log("🔥 Match joué :", winnerId, loserId, draw);
+    this.eventGateway.emitRankingUpdate({
+      updatedPlayers: await this.appService.getPlayers()
+    });
   }
 
   @Get('ranking/events')
