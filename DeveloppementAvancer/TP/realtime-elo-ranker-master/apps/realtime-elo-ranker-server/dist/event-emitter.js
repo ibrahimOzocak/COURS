@@ -18,7 +18,7 @@ let EventGateway = class EventGateway {
         this.eventEmitter = eventEmitter;
     }
     emitRankingUpdate(update) {
-        console.log("Émission d'une mise à jour du classement :", update);
+        console.log("🚀 [NestJS] Émission d'un événement SSE :", update);
         if (update.updatedPlayers && Array.isArray(update.updatedPlayers)) {
             console.log("Manita", update.updatedPlayers);
             update.updatedPlayers.forEach((player) => {
@@ -32,15 +32,26 @@ let EventGateway = class EventGateway {
         }
         if (update.player) {
             console.log("bonjour", update.player);
-            this.eventEmitter.emit('rankingUpdate', update);
-            console.log("verifie", update.player);
+            this.eventEmitter.emit('rankingUpdate', {
+                type: 'RankingUpdate',
+                player: { id: update.player.id, rank: update.player.rank }
+            });
+            console.log("👀 👀 👀 👀", {
+                type: 'RankingUpdate',
+                player: { id: update.player.id, rank: update.player.rank }
+            });
             return;
         }
         console.error("Erreur : Format d'événement `rankingUpdate` invalide :", update);
     }
     onRankingUpdate() {
-        console.log("Un client SSE s'est connecté aux mises à jour du classement.");
-        return (0, rxjs_1.fromEvent)(this.eventEmitter, 'rankingUpdate');
+        console.log("👀 [NestJS] Un client SSE s'est abonné aux mises à jour.");
+        return new rxjs_1.Observable((subscriber) => {
+            this.eventEmitter.on('rankingUpdate', (event) => {
+                console.log("📡 Événement capté :", event);
+                subscriber.next(`data: ${JSON.stringify(event)}\n\n`);
+            });
+        });
     }
     emitMatchFinished(update) {
         console.log("Émission d'une mise à jour de match terminé :", update);

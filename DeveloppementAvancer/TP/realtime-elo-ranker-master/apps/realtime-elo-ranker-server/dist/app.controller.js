@@ -25,7 +25,6 @@ let AppController = class AppController {
     addPlayer(id) {
         const newPlayer = this.appService.addPlayer(id);
         this.eventGateway.emitRankingUpdate({
-            type: 'RankingUpdate',
             player: { id: newPlayer.id, rank: newPlayer.rank }
         });
     }

@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@nestjs/event-emitter": "^3.0.0",
+    "@nestjs/platform-express": "^11.0.8",
     "pnpm": "^9.15.4"
   }
 }

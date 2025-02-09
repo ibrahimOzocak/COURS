@@ -10,6 +10,9 @@ const URL = "/api/ranking/events";
  * @returns {EventSource} The event source to listen to ranking events
  */
 export default function subscribeRankingEvents(baseUrl: string): EventSource {
+
+  console.log("✅ subscribeRankingEvents() appelé avec URL :", baseUrl, URL);
+
   // Subscribe to ranking events
   // ...
   return new EventSource(baseUrl + URL);

@@ -6,6 +6,11 @@ async function bootstrap() {
 
   app.enableCors(); // Activer CORS pour les requêtes de n'importe où
 
+  app.use((req: { method: any; url: any; }, res: any, next: () => void) => {
+    console.log(`📡 Requête reçue : ${req.method} ${req.url}`);
+    next();
+  });
+
   await app.listen(8080);
 }
 bootstrap();

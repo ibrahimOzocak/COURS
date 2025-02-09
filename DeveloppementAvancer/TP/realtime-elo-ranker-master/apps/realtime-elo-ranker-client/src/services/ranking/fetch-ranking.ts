@@ -10,6 +10,9 @@ const URL = "/api/ranking";
  * @returns {Promise<PlayerData[]>} A promise of future ranking data
  */
 export default function fetchRanking(baseUrl: string): Promise<PlayerData[]> {
+
+  console.log("📡||||| Fetching ranking from:", baseUrl + URL);
+
   return fetch(baseUrl + URL, { method: "GET" })
     .then(res => {
       if (res.ok) {

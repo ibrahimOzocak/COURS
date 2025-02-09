@@ -9,16 +9,16 @@ export class AppController {
   constructor(
     private readonly appService: AppService,
     private readonly eventGateway: EventGateway
-  ) {}
+  ) { }
 
   @Post('player')
   addPlayer(@Body('id') id: string): void {
     //this.appService.addPlayer(id);
     const newPlayer = this.appService.addPlayer(id);
     // Émettre une mise à jour après l'ajout du joueur
-    this.eventGateway.emitRankingUpdate({ 
-      type: 'RankingUpdate',
-      player: { id: newPlayer.id, rank: newPlayer.rank } });
+    this.eventGateway.emitRankingUpdate({
+      player: { id: newPlayer.id, rank: newPlayer.rank }
+    });
   }
 
   @Get('ranking')
@@ -30,7 +30,7 @@ export class AppController {
   playMatch(@Body('winner') winnerId: string, @Body('loser') loserId: string, @Body('draw') draw: boolean): void {
     console.log(winnerId, loserId, draw);
     this.appService.playMatch(winnerId, loserId, draw);
-    
+
     // Mettre à jour les joueurs après un match
     const updatedPlayers = this.appService.getPlayers();
     // Émettre une mise à jour du classement avec les joueurs mis à jour

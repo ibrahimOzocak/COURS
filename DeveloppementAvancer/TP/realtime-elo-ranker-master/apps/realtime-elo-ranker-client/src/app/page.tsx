@@ -89,25 +89,44 @@ export default function Home() {
       console.error(error);
     }
     const eventSource = subscribeRankingEvents(API_BASE_URL);
-    eventSource.onmessage = (msg: MessageEvent) => {
 
-      console.log("Received message", msg.data);
-      
-      const event: RankingEvent = JSON.parse(msg.data);
-      if (event.type === "Error") {
-        console.error(event.message);
-        return;
-      }
-      if (event.type === RankingEventType.RankingUpdate) {
-        updateLadderData(event.player);
+    console.log("🔗 Connexion à l'événement SSE :", eventSource);
+
+    eventSource.onopen = () => {
+      console.log("✅ Connexion SSE réussie !");
+    };
+
+    eventSource.onmessage = (msg: MessageEvent) => {
+      console.log(" ------------------------- Received message", msg.data);
+
+      // Assure-toi que msg.data est bien formaté avant de le parser
+      try {
+        // msg.data peut contenir des métadonnées comme 'data:'
+        // On extrait la partie JSON brute après 'data: '
+        const jsonData = msg.data.startsWith("data:") ? msg.data.substring(5).trim() : msg.data;
+
+        // Maintenant, on tente de parser ce JSON
+        const event: RankingEvent = JSON.parse(jsonData); // On parse ici
+        if (event.type === "Error") {
+          console.error(event.message);
+          return;
+        }
+        if (event.type === RankingEventType.RankingUpdate) {
+          updateLadderData(event.player);
+        }
+      } catch (error) {
+        console.error("Erreur lors du parsing de l'événement :", error);
       }
     };
+
     eventSource.onerror = (err) => {
       // TODO: toast error
       console.error(err);
       eventSource.close();
     };
+
     return () => eventSource.close();
+
   }, [API_BASE_URL, updateLadderData]);
 
   return (
